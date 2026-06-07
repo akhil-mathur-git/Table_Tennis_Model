@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data files
+data/raw/
+data/processed/
+*.csv
+*.xlsx
+*.json
+*.db
+*.sqlite
+
+# Keep sample data if needed
+!data/sample/
+
+# Mac files
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Model files
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+
+# PyCharm
+.idea/
