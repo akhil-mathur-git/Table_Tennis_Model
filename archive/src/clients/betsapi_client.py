@@ -4,7 +4,7 @@ import time
 import requests
 from dotenv import load_dotenv
 
-from src.config.settings import (
+from archive.src.config.settings import (
     PROJECT_ROOT,
     REQUEST_DELAY_SECONDS,
     SPORT_ID_TABLE_TENNIS,

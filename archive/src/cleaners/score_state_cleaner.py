@@ -1,4 +1,4 @@
-from src.config.settings import (
+from archive.src.config.settings import (
     KEEP_ONLY_SETS_1_TO_5,
     TAB_LEAGUES,
 )
