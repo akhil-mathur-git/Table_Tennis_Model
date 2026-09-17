@@ -37,7 +37,7 @@ print("\nTimeline length:")
 print(len(timeline))
 
 print("\nFirst 10 timeline rows:")
-pprint(timeline[:10])
+pprint(timeline[:])
 
 print("\nKeys in first timeline row:")
 print(timeline[0].keys())

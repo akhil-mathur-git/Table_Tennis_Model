@@ -125,5 +125,93 @@ def remove_incomplete_data(matches):
 
     return clean_matches
 
+def parse_score(score_string):
+    """
+    Inputs a score string like '7-5' and returns home_points and away_points as integers.
+    """
+    parts = score_string.split("-")
+    home_points = int(parts[0])
+    away_points = int(parts[1])
+    return home_points, away_points
+
+def get_home_won_set(scores, set_number):
+    """
+    Inputs the scores dict and set number and finds if home won that set
+    """
+    home = scores[str(set_number)]["home"]
+    away = scores[str(set_number)]["away"]
+    home = int(home)
+    away = int(away)
+    if home==away:
+        return -1
+    if home>away:
+        return 1
+    else:
+        return 0
+
+def get_sets_won_so_far(scores, set_number):
+    """
+    Inputs the final set scores dictionary and the current set number.
+    Outputs how many sets home and away had won before the current set.
+    """
+    home_sets_won_so_far = 0
+    away_sets_won_so_far = 0
+
+    for previous_set_number in range(1, set_number):
+        home_won_set = get_home_won_set(scores, previous_set_number)
+
+        if home_won_set == -1:
+            return -1, -1
+
+        if home_won_set == 1:
+            home_sets_won_so_far += 1
+        else:
+            away_sets_won_so_far += 1
+
+    return home_sets_won_so_far, away_sets_won_so_far
+
+def check_terminal_score_state(scores, home_points, away_points, set_number):
+    """
+    inputs the scores dictionary from the match and checks to see if the current score state is terminal
+    """
+    set_number = str(set_number)
+    terminal_away = int(scores[set_number]["away"])
+    terminal_home = int(scores[set_number]["home"])
+    if terminal_away==away_points and terminal_home==home_points:
+        return True
+    else:
+        return False
 
 
+
+def build_rows(match):
+    match_id = match["id"]
+    league_name = match["league"]["name"]
+    timeline = match["timeline"]
+    rows = []
+    for rep in timeline:
+
+        row = {"match_id":match_id, "league": league_name}
+        set_number = int(rep["gm"])
+        row["set_number"] = set_number
+        set_score = rep["ss"]
+        home_points, away_points = parse_score(set_score)
+        row["home_points"] = home_points
+        row["away_points"] = away_points
+        #Check if terminal score state
+        if check_terminal_score_state(match["scores"],home_points,away_points,set_number):
+            continue
+        row["point_difference"] = home_points-away_points
+        row["total_points_played"] = home_points + away_points
+        home_sets_won_so_far, away_sets_won_so_far = get_sets_won_so_far(match["scores"], set_number)
+        if home_sets_won_so_far == -1 or away_sets_won_so_far == -1:
+            continue
+        row["home_sets_won_so_far"] = home_sets_won_so_far
+        row["away_sets_won_so_far"] = away_sets_won_so_far
+        home_won_set = get_home_won_set(match["scores"],set_number)
+        if home_won_set == -1:
+            continue
+        row["home_won_set"] = home_won_set
+        rows.append(row)
+
+    return rows
