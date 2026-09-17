@@ -16,6 +16,12 @@ def build_feature_matrix(start_date,end_date):
     matches = get_matches_from_files(paths)
     #Clean data and only keep from TAB leagues
     clean_matches = remove_incomplete_data(matches)
+    all_rows = []
+    for match in clean_matches:
+        match_rows = build_rows(match)
+        all_rows.extend(match_rows)
+    feature_matrix = pd.DataFrame(all_rows)
+    return feature_matrix
 
 
 
